@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        <div class="card p-4 text-center">
+            <h3>Diagnostic Result</h3>
+            <img src="{{ url_for('uploaded_file', filename=filename) }}" class="img-fluid rounded my-4" style="max-height: 400px;">
+            <div class="display-6 fw-bold text-{{ 'danger' if result != 'notumor' else 'success' }}">
+                {{ result|upper }}
+            </div>
+            <p class="text-secondary mt-2">Confidence: {{ "%.2f"|format(confidence * 100) }}% | Time: {{ "%.3f"|format(time) }}s</p>
+            <a href="/upload" class="btn btn-outline-light mt-4">Analyze Another Scan</a>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card p-4" style="min-height: 100%;">
+            <h3 class="mb-4">Radiology Report (AI Generated)</h3>
+            <div class="report-content" style="white-space: pre-wrap; font-family: 'Courier New', Courier, monospace;">
+                {{ report }}
+            </div>
+            <hr>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-info" onclick="window.print()">Print Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

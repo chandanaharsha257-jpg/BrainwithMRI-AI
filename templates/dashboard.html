@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Medical AI Dashboard</h2>
+    <div class="d-flex gap-2">
+        <a href="/analyze_dataset_route" class="btn btn-outline-info">Re-Analyze Dataset</a>
+        <a href="/train_route" class="btn btn-outline-warning">Re-Train Model</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card p-4">
+            <h5>Class Distribution</h5>
+            <canvas id="classChart"></canvas>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card p-4">
+            <h5>Model Comparison</h5>
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Model Name</th>
+                        <th>Accuracy</th>
+                        <th>Size (MB)</th>
+                        <th>Optimized</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for model in models %}
+                    <tr>
+                        <td>{{ model.name }}</td>
+                        <td>{{ "%.2f"|format(model.accuracy * 100) }}%</td>
+                        <td>{{ "%.2f"|format(model.size) }}</td>
+                        <td>{{ "Yes" if model.optimized else "No" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card p-4">
+            <h5>Recent Diagnostics</h5>
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Patient</th>
+                        <th>Result</th>
+                        <th>Confidence</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pred in predictions %}
+                    <tr>
+                        <td>#{{ pred.id }}</td>
+                        <td>{{ pred.patient_name }}</td>
+                        <td><span class="badge bg-{{ 'danger' if pred.result != 'notumor' else 'success' }}">{{ pred.result }}</span></td>
+                        <td>{{ "%.2f"|format(pred.confidence * 100) }}%</td>
+                        <td>{{ "%.3f"|format(pred.prediction_time) }}s</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ctx = document.getElementById('classChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [{% for s in stats %}'{{ s.class_name }}',{% endfor %}],
+            datasets: [{
+                data: [{% for s in stats %}{{ s.image_count }},{% endfor %}],
+                backgroundColor: ['#38bdf8', '#818cf8', '#c084fc', '#fb7185']
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { labels: { color: 'white' } }
+            }
+        }
+    });
+</script>
+{% endblock %}

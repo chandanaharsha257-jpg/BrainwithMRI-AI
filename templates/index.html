@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row align-items-center" style="height: 80vh;">
+    <div class="col-md-7">
+        <h1 class="display-3 fw-bold mb-4">AI-Powered <br><span style="color: var(--accent-color);">MRI Analysis</span></h1>
+        <p class="lead mb-5 text-secondary">Advanced Brain Tumor Classification and Radiology Report Generation using ResNet-18 & Llama-3.</p>
+        <div class="d-flex gap-3">
+            <a href="/upload" class="btn btn-primary btn-lg px-5 py-3 rounded-pill">Start New Scan</a>
+            <a href="/dashboard" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill">View Analytics</a>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card p-4 text-center">
+            <img src="https://cdn-icons-png.flaticon.com/512/3062/3062220.png" class="img-fluid mb-4" style="max-width: 200px; margin: auto;">
+            <h4>Model Accuracy</h4>
+            <div class="progress mt-3" style="height: 10px;">
+                <div class="progress-bar bg-info" style="width: 96%"></div>
+            </div>
+            <p class="mt-2 text-info">96% Precision Rate</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
